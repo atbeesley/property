@@ -55,15 +55,33 @@ class Property
             db.close()
           end
 
+          def Property.find(id)
+            db = PG.connect({ dbname: 'property_tracker', host: 'localhost' })
+            sql = "SELECT * FROM properties WHERE id = $1"
+            values = [id]
+            db.prepare("find", sql)
+            property = db.exec_prepared("find", values)
+            db.close()
+            return Property.new(property[0])
+          end
 
+          def Property.find_by_address(address)
+            db = PG.connect({ dbname: 'property_tracker', host: 'localhost' })
+            sql = "SELECT * FROM properties WHERE address = $1"
+            values = [address]
+            db.prepare("find", sql)
+            property = db.exec_prepared("find", values)
+            db.close()
+            return Property.new(property[0])
+          end
 
           def Property.all()
             db = PG.connect({ dbname: 'property_tracker', host: 'localhost' })
             sql = "SELECT * FROM properties"
             db.prepare("all", sql)
-            orders = db.exec_prepared("all")
+            properties = db.exec_prepared("all")
             db.close()
-            return orders.map {|property| Property.new(property)}
+            return properties.map {|property| Property.new(property)}
           end
 
 
