@@ -29,4 +29,29 @@ class Property
       db.close()
     end
 
-  end
+      def update()
+          db = PG.connect({ dbname: 'property_tracker', host: 'localhost' })
+          sql =
+          "UPDATE properties SET
+          (
+            address,
+            value,
+            number_of_bedrooms,
+            year_built
+            ) = ($1, $2, $3, $4) WHERE id = $5"
+            values = [@address, @value, @number_of_bedrooms, @year_built, @id]
+            db.prepare("update, sql")
+            db.exec_prepared("update", values)
+            db.close()
+          end
+
+          def Property.all()
+            db = PG.connect({ dbname: 'property_tracker', host: 'localhost' })
+            sql = "SELECT * FROM properties"
+            db.prepare("all", sql)
+            orders = db.exec_prepared("all")
+            db.close()
+            return orders.map {|property| Property.new(property)}
+          end
+
+      end

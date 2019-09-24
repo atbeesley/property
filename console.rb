@@ -20,7 +20,7 @@ property2 = Property.new({
 
 property2.save()
 
-#properties = Property.all()
+properties = Property.all()
 
 binding.pry
 nil
