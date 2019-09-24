@@ -45,6 +45,18 @@ class Property
             db.close()
           end
 
+
+          def delete()
+            db = PG.connect({ dbname: 'property_tracker', host: 'localhost' })
+            sql = "DELETE FROM properties WHERE id = $1"
+            values = [@id]
+            db.prepare("delete_one", sql)
+            db.exec_prepared("delete_one", values)
+            db.close()
+          end
+
+
+
           def Property.all()
             db = PG.connect({ dbname: 'property_tracker', host: 'localhost' })
             sql = "SELECT * FROM properties"
@@ -53,5 +65,6 @@ class Property
             db.close()
             return orders.map {|property| Property.new(property)}
           end
+
 
       end
